@@ -17,6 +17,11 @@ module OpenProject
       end
 
       def self.create_list(project)
+        if true
+          Rails.logger.error "Mailing list management temporarily disabled"
+          return
+        end
+
         temp_file = File.open("#{Rails.root}/tmp/list#{project.identifier}", "w+")
         File.chmod(0644, temp_file.path)
         temp_file.print(project.sympa_mailing_list_xml_def)
@@ -26,6 +31,11 @@ module OpenProject
       end
 
       def self.destroy_list(project)
+        if true
+          Rails.logger.error "Mailing list management temporarily disabled"
+          return
+        end
+
         Logger.info "Destroying mailing list for project #{project.identifier}"
         execute_command("#{get_sympa_path} --purge_list=#{project.identifier}@#{get_domain}")
       end

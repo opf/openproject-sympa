@@ -7,17 +7,20 @@
     <%= content_tag(:label, t(:sympa_setting_roles)) %>
 
     <%-
-      roles = Role.alt(:order => "position ASC")
+      roles = Role.all.order(position: :asc)
       selected = @settings['sympa_roles'].collect(&:to_i) unless @settings['sympa_roles'].blank?
       selected ||= []
     -%>
 
     <% unless roles.empty? %>
     <%=
-      select_tag("settings[sympa_roles]",
-                 content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected ),
-                 :multiple => true,
-                 :size => 5)
+      select_tag(
+        "settings[sympa_roles]",
+        content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected ),
+        :multiple => true,
+        :size => 5,
+        :style => "height: 5em;"
+      )
     %>
     <% else %>
       <%= link_to(t(:join_project_missing_roles), :controller => 'roles', :action => 'index') %>
