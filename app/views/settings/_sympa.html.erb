@@ -7,7 +7,7 @@
     <%= content_tag(:label, t(:sympa_setting_roles)) %>
 
     <%-
-      roles = Role.alt(:order => "position ASC")
+      roles = Role.all.order(position: :asc)
       selected = @settings['sympa_roles'].collect(&:to_i) unless @settings['sympa_roles'].blank?
       selected ||= []
     -%>
