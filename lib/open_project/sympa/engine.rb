@@ -48,7 +48,8 @@ module OpenProject
 
       patches [
         :Project,
-        :EnabledModule
+        :EnabledModule,
+        :PermittedParams
       ]
 
       initializer 'sympa.register_hooks' do
