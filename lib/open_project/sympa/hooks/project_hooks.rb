@@ -5,12 +5,13 @@ module OpenProject
         # :project
         # :form
         def view_projects_form(context={})
-          content = context[:form].text_area(:sympa_info, :rows => 5, :class => 'wiki-edit')
+          content = context[:form].text_area(
+            :sympa_info, :rows => 5, :class => 'wiki-edit',
+            :container_class => "-wide"
+          )
 
-          #FIXME: this doesn't work any more. Why?
-          #content += wikitoolbar_for(:project_sympa_info)
-
-          return content_tag(:p, content)
+          content_tag(:div, content, class: "form--field") +
+            wikitoolbar_for('project_sympa_info')
         end
       end
     end
