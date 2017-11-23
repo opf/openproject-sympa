@@ -19,6 +19,6 @@
 
 module OpenProject
   module Sympa
-    VERSION = "7.3.2"
+    VERSION = "7.3.3"
   end
 end
