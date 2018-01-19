@@ -43,7 +43,8 @@ module OpenProject
              { :controller => 'mailing_list', :action => 'show' },
              :caption => 'Mailing List',
              :after => :activity,
-             :param => :project_id
+             :param => :project_id,
+             :icon => 'icon2 icon-mail1'
       end
 
       patches [
