@@ -8,7 +8,7 @@
 
     <%-
       roles = Role.all.order(position: :asc)
-      selected = @settings['sympa_roles'].collect(&:to_i) unless @settings['sympa_roles'].blank?
+      selected = @settings['sympa_roles'].map(&:to_i) unless @settings['sympa_roles'].blank?
       selected ||= []
     -%>
 
