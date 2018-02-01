@@ -34,7 +34,7 @@ module OpenProject::Sympa::Actions::Remote
   def ssh_host_and_command
 	  return @ssh_host_and_command if @ssh_host_and_command
 
-	  ssh, host, command = get_sympa_path.split(" ").map(&:strip)
+	  ssh, host, command = sympa_path.split(" ").map(&:strip)
 
 	  if ssh != 'ssh' && host.blank? || command.blank?
 	    raise ArgumentError, "Invalid remote sympa path, expected 'ssh <host> <command>'"
