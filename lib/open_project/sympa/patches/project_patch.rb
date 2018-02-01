@@ -45,7 +45,7 @@ module OpenProject
           end
 
           def sympa_owner_roles
-            roles_ids = Array(Setting.plugin_openproject_sympa['sympa_roles']).map(&:to_i)
+            role_ids = Array(Setting.plugin_openproject_sympa['sympa_roles']).map(&:to_i)
 
             if role_ids.empty?
               Role.where(name: "Manager").pluck(:id)

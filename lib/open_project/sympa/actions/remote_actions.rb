@@ -14,7 +14,7 @@ module OpenProject::Sympa::Actions::Remote
     temp_file.print("#{command} --create_list --robot #{sympa_domain} --input_file /tmp/#{project.identifier}.xml")
     temp_file.flush
 
-    Logger.info "Creating mailing list for project #{project.identifier}"
+    OpenProject::Sympa::Logger.info "Creating mailing list for project #{project.identifier}"
 
     system "ssh -oStrictHostKeyChecking=no #{host} < #{temp_file.path}"
   end
@@ -22,13 +22,17 @@ module OpenProject::Sympa::Actions::Remote
   def destroy_list(project)
   	host, command = ssh_host_and_command
 
-    Logger.info "Destroying mailing list for project #{project.identifier}"
+    OpenProject::Sympa::Logger.info "Destroying mailing list for project #{project.identifier}"
 
     system "ssh -oStrictHostKeyChecking=no #{command} --purge_list=#{project.identifier}@#{sympa_domain}"
   end
 
   def sympa_domain
     Setting.plugin_openproject_sympa['sympa_domain']
+  end
+
+  def sympa_path
+    Setting.plugin_openproject_sympa['sympa_path']
   end
 
   def ssh_host_and_command
