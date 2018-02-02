@@ -6,13 +6,18 @@ module OpenProject::Sympa::Actions::Remote
   def create_list(project)
   	host, command = ssh_host_and_command
 
-    temp_file = File.open("#{Rails.root}/tmp/list#{project.identifier}", "w+")
+    file = File.open("#{Rails.root}/tmp/list_#{project.identifier}.sh", "w+")
     File.chmod(0644, temp_file.path)
-    temp_file.print("cat > /tmp/#{project.identifier}.xml <<XML")
-    temp_file.print(project.sympa_mailing_list_xml_def.to_xml)
-    temp_file.print("XML")
-    temp_file.print("#{command} --create_list --robot #{sympa_domain} --input_file /tmp/#{project.identifier}.xml")
-    temp_file.flush
+
+    file.print("cat > /tmp/#{project.identifier}.xml <<XML")
+    file.print("\n")
+    file.print(project.sympa_mailing_list_xml_def.to_xml)
+    file.print("\n")
+    file.print("XML")
+    file.print("\n")
+    file.print("#{command} --create_list --robot #{sympa_domain} --input_file /tmp/#{project.identifier}.xml")
+    file.print("\n")
+    file.flush
 
     OpenProject::Sympa::Logger.info "Creating mailing list for project #{project.identifier}"
 
@@ -38,12 +43,21 @@ module OpenProject::Sympa::Actions::Remote
   def ssh_host_and_command
 	  return @ssh_host_and_command if @ssh_host_and_command
 
-	  ssh, host, command = sympa_path.split(" ").map(&:strip)
+	  host, command = split_host_and_command sympa_path
 
-	  if ssh != 'ssh' && host.blank? || command.blank?
+	  if host.blank? || command.blank?
 	    raise ArgumentError, "Invalid remote sympa path, expected 'ssh <host> <command>'"
 	  end
 
 	  @ssh_host_and_command = [host, command]
 	end
+
+  def split_host_and_command(path)
+    return [] unless path.start_with?("ssh")
+
+    host = path[0..path.index(" ")].strip
+    cmd = path[path.index(" ")..-1].strip
+
+    [host, cmd]
+  end
 end
