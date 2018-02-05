@@ -7,7 +7,7 @@ module OpenProject::Sympa::Actions::Remote
   	host, command = ssh_host_and_command
 
     file = File.open("#{Rails.root}/tmp/list_#{project.identifier}.sh", "w+")
-    File.chmod(0644, temp_file.path)
+    File.chmod(0644, file.path)
 
     file.print("cat > /tmp/#{project.identifier}.xml <<XML")
     file.print("\n")
@@ -21,7 +21,7 @@ module OpenProject::Sympa::Actions::Remote
 
     OpenProject::Sympa::Logger.info "Creating mailing list for project #{project.identifier}"
 
-    system "ssh -oStrictHostKeyChecking=no #{host} < #{temp_file.path}"
+    system "ssh -oStrictHostKeyChecking=no #{host} < #{file.path}"
   end
 
   def destroy_list(project)
@@ -29,7 +29,7 @@ module OpenProject::Sympa::Actions::Remote
 
     OpenProject::Sympa::Logger.info "Destroying mailing list for project #{project.identifier}"
 
-    system "ssh -oStrictHostKeyChecking=no #{command} --purge_list=#{project.identifier}@#{sympa_domain}"
+    system "ssh -oStrictHostKeyChecking=no #{host} #{command} --purge_list=#{project.identifier}@#{sympa_domain}"
   end
 
   def sympa_domain
@@ -55,6 +55,7 @@ module OpenProject::Sympa::Actions::Remote
   def split_host_and_command(path)
     return [] unless path.start_with?("ssh")
 
+    path = path[path.index(" ")..-1].strip # strip leading 'ssh '
     host = path[0..path.index(" ")].strip
     cmd = path[path.index(" ")..-1].strip
 

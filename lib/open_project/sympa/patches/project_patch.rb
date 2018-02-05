@@ -41,7 +41,7 @@ module OpenProject
 
             emails << User.current.mail
 
-            emails.uniq
+            emails.uniq.reject(&:blank?)
           end
 
           def sympa_owner_roles
