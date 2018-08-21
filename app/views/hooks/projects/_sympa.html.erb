@@ -1,3 +1,4 @@
+<% if @project.has_sympa_mailing_list? %>
 <div class="form--field">
   <label class="form--label" title="Sympa info" for="sympa_info">Sympa info</label>
   <span class="form--field-container">
@@ -7,3 +8,4 @@
     </span>
   </span>
 </div>
+<% end %>
