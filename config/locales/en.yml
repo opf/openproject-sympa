@@ -12,7 +12,7 @@ en:
   sympa_setting_info_url: "Information page url prefix"
   sympa_setting_list_type: "List type"
   field_sympa_info: "Mailing list information"
-  sympa_mailing_list_page_title: "{{name}} mailing list"
+  sympa_mailing_list_page_title: "%{name} mailing list"
   sympa_mailing_list_page_intro: "This project's mailing list address is:"
   sympa_mailing_list_page_admin_address: "The subscription / unsubscription email address is:"
   sympa_mailing_list_page_subscribe: "In order to subscribe, please send an empty email to that address, with the header:"

@@ -38,12 +38,15 @@ module OpenProject
         end
 
         #Creates an entry on the project menu for displaying the mailing list
-        menu :project_menu,
-             :mailing_list,
-             { :controller => 'mailing_list', :action => 'show' },
-             :caption => 'Mailing List',
-             :after => :activity,
-             :param => :project_id
+        menu(
+          :project_menu,
+          :mailing_list,
+          { controller: 'mailing_list', action: 'show' },
+          caption: 'Mailing List',
+          after: :activity,
+          param: :project_id,
+          icon: 'icon2 icon-mail1'
+        )
       end
 
       patches [
