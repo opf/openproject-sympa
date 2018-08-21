@@ -12,7 +12,7 @@ es:
   sympa_setting_info_url: "Prefijo de la url de información"
   sympa_setting_list_type: "Tipo de lista"
   field_sympa_info: "Información de la lista"
-  sympa_mailing_list_page_title: "Lista de correo {{name}}"
+  sympa_mailing_list_page_title: "Lista de correo %{name}"
   sympa_mailing_list_page_intro: "La dirección de esta lista de correo es:"
   sympa_mailing_list_page_admin_address: "La dirección de correo para suscribirse / cancelar subscripciones es:"
   sympa_mailing_list_page_subscribe: "Para suscribirse, por favor envíe un email vacío a dicha dirección, con la cabecera:"
