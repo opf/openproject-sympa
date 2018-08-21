@@ -1,33 +1,42 @@
 require 'open_project/sympa/logger'
+require 'open_project/sympa/actions/local_actions'
+require 'open_project/sympa/actions/remote_actions'
 
 module OpenProject
   module Sympa
     module Actions
-      def self.execute_command(command)
-        Logger.info("  executing #{command}")
-        system "sudo #{command} >> #{Logger.path} 2>&1 &"
-      end
+      class << self
+        def remote?
+          Setting.plugin_openproject_sympa['sympa_path'].start_with? "ssh "
+        end
 
-      def self.get_sympa_path
-        Setting.plugin_openproject_sympa['sympa_path']
-      end
+        def enabled?
+          !disabled?
+        end
 
-      def self.get_domain
-        Setting.plugin_openproject_sympa['sympa_domain']
-      end
+        def disabled?
+          String(ENV["DISABLE_SYMPA_LIST_SYNC"]) == "true"
+        end
 
-      def self.create_list(project)
-        temp_file = File.open("#{Rails.root}/tmp/list#{project.identifier}", "w+")
-        File.chmod(0644, temp_file.path)
-        temp_file.print(project.sympa_mailing_list_xml_def)
-        temp_file.flush
-        Logger.info "Creating mailing list for project #{project.identifier}"
-        execute_command("#{get_sympa_path} --create_list --robot #{get_domain} --input_file #{temp_file.path}")
-      end
+        def delegate_to
+          if remote?
+            OpenProject::Sympa::Actions::Remote
+          else
+            OpenProject::Sympa::Actions::Local
+          end
+        end
 
-      def self.destroy_list(project)
-        Logger.info "Destroying mailing list for project #{project.identifier}"
-        execute_command("#{get_sympa_path} --purge_list=#{project.identifier}@#{get_domain}")
+        def create_list(project)
+          return if disabled?
+
+          delegate_to.create_list project
+        end
+
+        def destroy_list(project)
+          return if disabled?
+
+          delegate_to.destroy_list project
+        end
       end
     end
   end

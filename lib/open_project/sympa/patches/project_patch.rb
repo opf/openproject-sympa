@@ -35,10 +35,23 @@ module OpenProject
           end
 
           def sympa_owner_emails
-            roles = Setting.plugin_openproject_sympa['sympa_roles'].collect{|r| r.to_i}
-            emails = members.all(:conditions => ['role_id IN (?)', roles]).collect{|m| m.user.mail}
+            emails = members
+              .where("roles.id" => sympa_owner_roles)
+              .map { |m| m.user.mail }
+
             emails << User.current.mail
-            return emails.uniq
+
+            emails.uniq.reject(&:blank?)
+          end
+
+          def sympa_owner_roles
+            role_ids = Array(Setting.plugin_openproject_sympa['sympa_roles']).map(&:to_i)
+
+            if role_ids.empty?
+              Role.where(name: "Manager").pluck(:id)
+            else
+              role_ids
+            end
           end
 
           def sympa_list_type
@@ -47,9 +60,6 @@ module OpenProject
 
           # returns the xml needed for defining a mailing list
           def sympa_mailing_list_xml_def
-
-            return "<?xml version='1.0'?><foo></foo>" if true
-
             # Template of the generated xml:
             #
             # <?xml version='1.0'?>
@@ -69,24 +79,23 @@ module OpenProject
             #   </owner>
             # </list>
 
-            xml = Nokogiri::Builder::XmlMarkup.new(:indent => 2)
+            Nokogiri::XML::Builder.new(encoding: "UTF-8") do |xml|
+              xml.list do
+                xml.listname identifier
+                xml.type sympa_list_type
+                xml.subject name
+                xml.description description
+                xml.status 'open'
+                xml.language 'en_US'
+                xml.topic 'Computing'
 
-            xml.instruct! # adds <?xml version="1.0" encoding="UTF-8"> at the beginning
-            xml.list do
-              xml.listname identifier
-              xml.type sympa_list_type
-              xml.subject name
-              xml.description description
-              xml.status 'open'
-              xml.language 'en_US'
-              xml.topic 'Computing'
-              sympa_owner_emails.each do |email|
-                xml.owner('multiple' => '1') do
-                  xml.email(email)
+                sympa_owner_emails.each do |email|
+                  xml.owner('multiple' => '1') do
+                    xml.email email
+                  end
                 end
               end
             end
-
           end
         end
       end

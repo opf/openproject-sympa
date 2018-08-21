@@ -6,7 +6,7 @@ en:
   sympa_setting_roles: "Manager role"
   sympa_missing_roles: "Add new roles"
   sympa_setting_domain: "Domain name"
-  sympa_setting_path: "Sympa.pl path"
+  sympa_setting_path: "Sympa command"
   sympa_setting_log: "Sympa log"
   sympa_setting_archive_url: "Archive url prefix"
   sympa_setting_info_url: "Information page url prefix"
