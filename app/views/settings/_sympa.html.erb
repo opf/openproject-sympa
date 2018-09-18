@@ -1,0 +1,60 @@
+<fieldset>
+  <%= content_tag(:legend, t(:sympa_text_settings_configuration)) %>
+
+  <%= content_tag(:p, t(:sympa_settings_help)) %>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_roles)) %>
+
+    <%-
+      roles = Role.all.order(position: :asc)
+      selected = @settings['sympa_roles'].map(&:to_i) unless @settings['sympa_roles'].blank?
+      selected ||= []
+    -%>
+
+    <% unless roles.empty? %>
+    <%=
+      select_tag(
+        "settings[sympa_roles]",
+        content_tag(:option, '') + options_from_collection_for_select(roles, :id, :name, selected ),
+        :multiple => true,
+        :size => 5,
+        :style => "height: 5em;"
+      )
+    %>
+    <% else %>
+      <%= link_to(t(:join_project_missing_roles), :controller => 'roles', :action => 'index') %>
+   <% end %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_list_type)) %>
+    <%= text_field_tag("settings[sympa_list_type]", @settings['sympa_list_type'], :size=>60 ) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_domain)) %>
+    <%= text_field_tag("settings[sympa_domain]", @settings['sympa_domain'], :size=>60 ) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_path)) %>
+    <%= text_field_tag("settings[sympa_path]", @settings['sympa_path'], :size=>60 ) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_archive_url)) %>
+    <%= text_field_tag("settings[sympa_archive_url]", @settings['sympa_archive_url'], :size=>60 ) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_info_url)) %>
+    <%= text_field_tag("settings[sympa_info_url]", @settings['sympa_info_url'], :size=>60 ) %>
+  </p>
+
+  <p>
+    <%= content_tag(:label, t(:sympa_setting_log)) %>
+    <%= text_field_tag("settings[sympa_log]", @settings['sympa_log'], :size=>60 ) %>
+  </p>
+
+</fieldset>

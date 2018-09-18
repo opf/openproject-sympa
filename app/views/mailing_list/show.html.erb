@@ -1,0 +1,31 @@
+<% html_title t(:sympa_mailing_list_page_title, :name => @project.name) -%>
+<h2> <%= h @project.name %> mailing list </h2>
+
+<p>
+<%= t(:sympa_mailing_list_page_intro) %>
+<a href='mailto:<%= @project.sympa_mailing_list_address %>'><%= @project.sympa_mailing_list_address %></a>
+</p>
+
+<p>
+<%= t(:sympa_mailing_list_page_admin_address) %> <a href='mailto:<%= @project.sympa_admin_address %>'><%= @project.sympa_admin_address %></a>
+</p>
+
+<p>
+<%= t(:sympa_mailing_list_page_subscribe) %> <em>subscribe <%= @project.identifier %> Firstname Name</em>
+</p>
+
+<p>
+<%= t(:sympa_mailing_list_page_unsubscribe ) %>  <em>unsubscribe <%= @project.identifier %> </em>
+
+<p>
+<%= t(:sympa_mailing_list_page_subscription_web) %> <a href="<%= @project.sympa_url %>"><%= @project.sympa_url %></a>
+</p>
+
+<p>
+<%= t(:sympa_mailing_list_page_archive_text) %>
+<a href='<%= @project.sympa_archive_url %>'><%= @project.sympa_archive_url %></a>
+</p>
+
+<p>
+<%= format_text @project.sympa_info %>
+</p>
